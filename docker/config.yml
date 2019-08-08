@@ -1,0 +1,27 @@
+# Application specific config
+SIMPLESAMLPHP:
+  GIT_REPO: git@github.com:simplesamlphp/simplesamlphp.git
+  GIT_BRANCH: master
+SAML2_IDP:
+  CERTIFICATE: server_idp.crt
+  PRIVATE_KEY: server_idp.pem
+
+# Confd
+fastcgi:
+  url_prefix: simplesaml
+ssp1:
+  server_name: ssp1.dev
+  listen_port: 80
+  url_prefix: simplesaml
+  subdomain: ssp1
+  upstream: "php-fpm:9000"
+  php:
+    user: www-data
+    group: www-data
+    listen_port: 9000
+    server_name: php-fpm
+  mysql:
+    user: ssp1
+    password: dev
+    database: ssp1db
+    root_password: qwerty

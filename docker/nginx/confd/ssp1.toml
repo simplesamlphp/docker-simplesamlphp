@@ -1,0 +1,14 @@
+[template]
+prefix = "/ssp1"
+src = "app-server.conf.tmpl"
+dest = "/etc/nginx/conf.d/app-ssp1.conf"
+mode = "0644"
+keys = [
+  "/server_name",
+  "/listen_port",
+  "/url_prefix",
+  "/subdomain",
+  "/upstream",
+]
+check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
+reload_cmd = "/usr/sbin/nginx -s reload"

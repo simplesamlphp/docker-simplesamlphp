@@ -1,0 +1,11 @@
+baseurlpath: http://localhost:8000/simplesaml/
+technicalcontact_name: Administrator
+technicalcontact_email: bendik@brenne.nu
+secretsalt: 6wvw43hzcrpksl7yj3j4d8b0ewiq30ku
+auth.adminpassword: hore91321
+memcache_store.servers:
+  -
+    hostname: memcached
+    port: 11211
+usenewui: true
+enable.saml20-idp: true

@@ -1,0 +1,11 @@
+[template]
+prefix = "/ssp1/php"
+src = "php.ini.tmpl"
+dest = "/usr/local/etc/php/conf.d/99-overrides.ini"
+keys = [
+  "/server_name",
+  "/listen_port",
+  "/upload_max_filesize",
+  "/post_max_size",
+]
+check_cmd = "/usr/local/sbin/php-fpm -t -c {{.src}}"

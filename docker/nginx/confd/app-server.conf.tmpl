@@ -1,0 +1,154 @@
+server_tokens off;
+
+upstream {{getv "/subdomain"}} {
+{{range getvs "/upstream/*"}}
+    server {{.}};
+{{end}}
+}
+
+server {
+    listen {{getv "/listen_port"}};
+
+    server_name {{getv "/server_name"}};
+
+    access_log /var/log/nginx/{{getv "/server_name"}}_access.log;
+    error_log /var/log/nginx/{{getv "/server_name"}}_error.log;
+
+    # Vars
+    set $phpcgi {{getv "/subdomain"}};
+    set $url_prefix {{getv "/url_prefix"}};
+
+    client_max_body_size 108M;
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+
+    gzip on;
+    gzip_min_length 500;
+    gzip_proxied any;
+    gzip_disable "msie6";
+    gzip_types
+        application/javascript
+        application/json
+        application/vnd.ms-fontobject
+        application/x-font-ttf
+        application/xml
+        font/opentype
+        text/css
+        text/javascript
+        text/plain
+        text/xml;
+
+    root /application/simplesamlphp/www;
+    index index.php;
+
+    fastcgi_keep_conn on; # keep alive to the FCGI upstream
+
+    #rewrite ^/app\.php/?(.*)$ /$1 permanent;
+    #try_files $uri @rewriteapp;
+    #location @rewriteapp {
+    #    rewrite ^(.*)$ /app.php/$1 last;
+    #}
+
+    ################################################################
+    ### Generic configuration: for most Simplesamlphp instances
+    ################################################################
+    # include apps/simplesamlphp.conf;
+    location / {
+        alias /application/simplesamlphp/www/;
+
+        location ~ ^(?<prefix>/{{getv "/url_prefix"}})(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
+            include fastcgi_simplesamlphp.conf;
+            fastcgi_pass $phpcgi;
+        }
+
+        ## All static files will be served directly.
+        location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff2?|svg)$ {
+            rewrite ^/{{getv "/url_prefix"}}(.*)$ $1 last;
+
+            access_log off;
+            expires 30d;
+            ## No need to bleed constant updates. Send the all shebang in one
+            ## fell swoop.
+            tcp_nodelay off;
+            ## Set the OS file cache.
+            #open_file_cache max=3000 inactive=120s;
+            #open_file_cache_valid 45s;
+            #open_file_cache_min_uses 2;
+            #open_file_cache_errors off;
+        }
+
+        location ~* ^(?:.+\.(?:htaccess|make|txt|engine|inc|info|install|module|profile|po|pot|sh|.*sql|test|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
+            return 404;
+        }
+
+        try_files $uri @simplesamlphp;
+    }
+
+    location @simplesamlphp {
+        include fastcgi_simplesamlphp.conf;
+        fastcgi_pass $phpcgi;
+    }
+
+    ## Disallow access to .bzr, .git, .hg, .svn, .cvs directories: return
+    ## 404 as not to disclose information.
+    location ^~ /.bzr {
+        return 404;
+    }
+
+    location ^~ /.git {
+        return 404;
+    }
+
+    location ^~ /.hg {
+        return 404;
+    }
+
+    location ^~ /.svn {
+        return 404;
+    }
+
+    location ^~ /.cvs {
+        return 404;
+    }
+
+    ## Disallow access to patches directory.
+    location ^~ /patches {
+        return 404;
+    }
+
+    ## Disallow access to drush backup directory.
+    location ^~ /backup {
+        return 404;
+    }
+
+    ## Disable access logs for robots.txt.
+    location = /robots.txt {
+        access_log off;
+        try_files $uri @simplesamlphp;
+    }
+
+    ## RSS feed support.
+    location = /rss.xml {
+        try_files $uri @simplesamlphp;
+    }
+
+    ## XML Sitemap support.
+    location = /sitemap.xml {
+        try_files $uri @simplesamlphp;
+    }
+
+    ## Support for favicon. Return an 1x1 transparent GIF if it doesn't
+    ## exist.
+    location = /favicon.ico {
+        expires 30d;
+        try_files /favicon.ico @empty;
+    }
+
+    ## Return an in memory 1x1 transparent GIF.
+    location @empty {
+        expires 30d;
+        empty_gif;
+    }
+}

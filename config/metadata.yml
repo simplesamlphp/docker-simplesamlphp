@@ -1,0 +1,4 @@
+__DYNAMIC:1__:
+  host: __DEFAULT__
+  privatekey: server_idp.pem
+  certificate: server_idp.crt

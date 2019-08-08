@@ -1,0 +1,12 @@
+[template]
+prefix = "/ssp1/php"
+src = "php-fpm.conf.tmpl"
+dest = "/usr/local/etc/php-fpm.d/99-ssp1.conf"
+#owner = "www-data"
+mode = "0644"
+keys = [
+  "/user",
+  "/group",
+  "/listen_port",
+]
+check_cmd = "/usr/local/sbin/php-fpm -t -c {{.src}}"

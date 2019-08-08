@@ -1,0 +1,87 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+  #
+  # Redis
+  #
+  redis:
+    image: redis:alpine
+    container_name: simplesamlphp-docker-redis
+  #
+  # MySQL
+  #
+  mysql:
+    image: mysql:8.0
+    container_name: simplesamlphp-docker-mysql
+    working_dir: /application
+    env_file:
+      - .docker.env
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+  #
+  # Web server
+  #
+  webserver:
+    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: simplesamlphp-docker-webserver
+    working_dir: /application/simplesamlphp
+    env_file:
+      - .docker.env
+    links:
+      - "php-fpm:php-fpm"
+    depends_on:
+      - php-fpm
+
+  #
+  # PHP
+  #
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    container_name: simplesamlphp-docker-php-fpm
+    working_dir: /application
+    env_file:
+      - .docker.env
+    links:
+      - "mysql:db_server"
+      - "memcached:memcached"
+    depends_on:
+      - memcached
+
+  #
+  # Composer
+  #
+#  composer:
+#    image: composer/composer:php7
+#    container_name: simplesamlphp-docker-composer
+#    restart: "no"
+#    command: install
+#    volumes:
+#    - .:/application
+#    working_dir: /application/simplesamlphp
+
+  #
+  # Memcache
+  #
+  memcached:
+    image: memcached:alpine
+    container_name: simplesamlphp-docker-memcached
+#
+#networks:
+#  app_net:
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: "172.16.10.0/24"
+#        - subnet: "2001:3984:1000::/64"

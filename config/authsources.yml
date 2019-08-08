@@ -1,0 +1,34 @@
+admin:
+  # The default is to use core:AdminPassword, but it can be replaced with
+  # any authentication source.
+  - "core:AdminPassword"
+default-sp:
+  0: saml:SP
+  entityID: null
+  idp: null
+  discoURL: null
+  name:
+    en: A service
+    no: En tjeneste
+example-static:
+  0: exampleauth:Static
+  uid:
+    - testuser
+  eduPersonAffiliation:
+    - member
+    - employee
+  cn:
+    - Test User
+example-userpass:
+  0: exampleauth:UserPass
+
+#  Give the user an option to save their username for future login attempts
+#  And when enabled, what should the default be, to save the username or not
+# 'remember.username.enabled' => false,
+# 'remember.username.checked' => false,
+  "student:studentpass":
+    uid: [test]
+    eduPersonAffiliation: ['member', 'student']
+  "employee:employeepass":
+    uid: [employee]
+    eduPersonAffiliation: ['member', 'employee']
