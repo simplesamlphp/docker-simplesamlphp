@@ -8,10 +8,10 @@ SimpleSAMLPHP Docker environment
 Configure the docker environment using the file [docker/config.yml](docker/config.yml).
 
 For further configuration, see;
-- [docker/nginx/confd/app-server.conf.tmpl]()
-- [docker/nginx/confd/fastcgi.conf.tmpl]()
-- [docker/php-fpm/confd/php.ini.tmpl]()
-- [docker/php-fpm/confd/php-fpm.conf.tmpl]()
+- [docker/nginx/confd/app-server.conf.tmpl](docker/nginx/confd/app-server.conf.tmpl)
+- [docker/nginx/confd/fastcgi.conf.tmpl](docker/nginx/confd/fastcgi.conf.tmpl)
+- [docker/php-fpm/confd/php.ini.tmpl](docker/php-fpm/confd/php.ini.tmpl)
+- [docker/php-fpm/confd/php-fpm.conf.tmpl](docker/php-fpm/confd/php-fpm.conf.tmpl)
 
 ### Build
 
