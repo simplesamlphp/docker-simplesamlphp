@@ -4,5 +4,5 @@ src = "fastcgi.conf.tmpl"
 dest = "/etc/nginx/fastcgi_simplesamlphp.conf"
 mode = "0644"
 
-check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
-reload_cmd = "/usr/sbin/nginx -s reload"
+#check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
+#reload_cmd = "/usr/sbin/nginx -s reload"

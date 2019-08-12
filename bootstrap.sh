@@ -45,7 +45,7 @@ function parse_yaml() {
 }
 
 echo -n "Preparing env_file '$(realpath --relative-to="$SCRIPTPATH" "$ENV_FILE_DEST")' using '$(realpath --relative-to="$SCRIPTPATH" "$ENV_FILE_SRC")'... "
-if [[ ! -f "$ENV_FILE_DEST" || $OVERWRITE == "1" ]]; then
+if [[ ! -f "$ENV_FILE_DEST" || ${OVERWRITE} == "1" ]]; then
   (parse_yaml "$ENV_FILE_SRC" > "$ENV_FILE_DEST") || exit 1;
   echo "OK"
 else
@@ -57,8 +57,9 @@ fi
 . "${ENV_FILE_DEST}"
 
 echo -n "Preparing source code directory... ";
-if [ -d "$SOURCEPATH" ]; then
-  echo "Already created";
+if [[ -d "$SOURCEPATH" ]]; then
+  echo "Already created.."
+  cd "${SOURCEPATH}"; git pull
 else
   echo "Cloning from git"
   git clone --branch "$SIMPLESAMLPHP_GIT_BRANCH" "$SIMPLESAMLPHP_GIT_REPO" "$SOURCEPATH"

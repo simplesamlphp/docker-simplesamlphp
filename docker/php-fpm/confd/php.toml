@@ -1,5 +1,5 @@
 [template]
-prefix = "/ssp1/php"
+prefix = "/app/php"
 src = "php.ini.tmpl"
 dest = "/usr/local/etc/php/conf.d/99-overrides.ini"
 keys = [

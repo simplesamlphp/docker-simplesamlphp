@@ -9,19 +9,22 @@ SAML2_IDP:
 # Confd
 fastcgi:
   url_prefix: simplesaml
-ssp1:
-  server_name: ssp1.dev
+app:
+  server_name: simplesamlphp.dev
   listen_port: 80
   url_prefix: simplesaml
-  subdomain: ssp1
-  upstream: "php-fpm:9000"
+  subdomain: simplesamlphp
+  upstream:
+    - "php-fpm:9000"
   php:
     user: www-data
     group: www-data
     listen_port: 9000
     server_name: php-fpm
+    upload_max_filesize: 1G
+    post_max_size: 1G
   mysql:
-    user: ssp1
+    user: simplesamlphp
     password: dev
-    database: ssp1db
+    database: simplesamlphpdb
     root_password: qwerty

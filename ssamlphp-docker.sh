@@ -100,15 +100,40 @@ function init_args() {
 function copy_configs() {
   config_templates_dir="$SCRIPTPATH/simplesamlphp/config-templates"
   metadata_templates_dir="$SCRIPTPATH/simplesamlphp/metadata-templates"
+  #ls "$config_templates_dir/"
+  #echo "-----"
+  echo -n "Copying config templates... "
+  mkdir -p "$1/config" && cp -rt "$1/config" "$config_templates_dir"/* && echo "OK"
+  echo -n "Copying metadata templates... "
+  mkdir -p "$1/metadata" && cp -rt "$1/metadata" "$metadata_templates_dir"/* && echo "OK"
+}
 
-  mkdir -p "$1/config" && cp -t "$1/config" "$config_templates_dir/*"
-  mkdir -p "$1/metadata" && cp -t "$1/metadata" "$metadata_templates_dir/*"
+function create_composer_overrides() {
+  cat <<EOF > "$1/docker-compose-overrides.yml"
+version: "3.1"
+services:
+  php-fpm:
+    volumes:
+      - $1/config:/application/simplesamlphp/config
+      - $1/metadata:/application/simplesamlphp/metadata
+EOF
 }
 
 function docker_compose() {
   docker-compose --project-name "$1" \
     --project-directory "$2"
+}
 
+function print_configs() {
+  configs=($(ls -d ${SCRIPTPATH}/ssamlphp_configs/*))
+  if (( ${#configs[@]} == 0 )); then
+    echo "* No configurations found."
+  else
+    echo "* Available configurations:"
+    for i in ${configs[@]}; do
+      echo " - $(basename ${i})"
+    done
+  fi
 }
 
 init_args "$@"
@@ -125,19 +150,38 @@ add)
   fi
   mkdir -p "$CONF_PATH"
   copy_configs "$CONF_PATH"
+  create_composer_overrides "$CONF_PATH"
   ;;
 delete)
   if [[ -z ${CONF_EXISTS} ]]; then
     (>&2 echo "Configuration '$name' does not exist")
+    print_configs
     exit 1
   fi
   rm -rf "$CONF_PATH"
   ;;
 build)
-
+  if [[ -z ${CONF_EXISTS} ]]; then
+    (>&2 echo "Configuration '$name' does not exist")
+    print_configs
+    exit 1
+  fi
+  cd ${SCRIPTPATH} && docker-compose \
+    -f docker-compose.yml \
+    -f ${CONF_PATH}/docker-compose-overrides.yml \
+    build \
+    --build-arg confd_file=docker/config-test1.yml
   ;;
 run)
+  if [[ -z ${CONF_EXISTS} ]]; then
+    (>&2 echo "Configuration '$name' does not exist")
+    print_configs
+    exit 1
+  fi
+  cd ${SCRIPTPATH} && docker-compose \
+    -f docker-compose.yml \
+    -f ${CONF_PATH}/docker-compose-overrides.yml \
+    up
   ;;
 esac
 
-echo "$CONF_PATH"

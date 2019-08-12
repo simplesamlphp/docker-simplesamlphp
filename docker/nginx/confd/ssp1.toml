@@ -1,7 +1,7 @@
 [template]
-prefix = "/ssp1"
+prefix = "/app"
 src = "app-server.conf.tmpl"
-dest = "/etc/nginx/conf.d/app-ssp1.conf"
+dest = "/etc/nginx/conf.d/app-server.conf"
 mode = "0644"
 keys = [
   "/server_name",
@@ -10,5 +10,5 @@ keys = [
   "/subdomain",
   "/upstream",
 ]
-check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
-reload_cmd = "/usr/sbin/nginx -s reload"
+#check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
+#reload_cmd = "/usr/sbin/nginx -s reload"

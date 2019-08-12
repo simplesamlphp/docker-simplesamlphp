@@ -19,11 +19,11 @@ services:
     working_dir: /application
     env_file:
       - .docker.env
-    environment:
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
+    #environment:
+    #  - MYSQL_ROOT_PASSWORD
+    #  - MYSQL_DATABASE
+    #  - MYSQL_USER
+    #  - MYSQL_PASSWORD
 
   #
   # Web server
@@ -35,12 +35,17 @@ services:
       dockerfile: docker/nginx/Dockerfile
     container_name: simplesamlphp-docker-webserver
     working_dir: /application/simplesamlphp
+    command: "/start.sh"
+    volumes:
+      - .:/application
     env_file:
       - .docker.env
     links:
       - "php-fpm:php-fpm"
     depends_on:
       - php-fpm
+    ports:
+      - "8080:80"
 
   #
   # PHP
@@ -51,6 +56,11 @@ services:
       dockerfile: docker/php-fpm/Dockerfile
     container_name: simplesamlphp-docker-php-fpm
     working_dir: /application
+    command: "/start.sh"
+    volumes:
+      - .:/application
+      - ./ssamlphp_configs/bendiks-simplesamlphp-sp/config:/application/simplesamlphp/config
+      - ./ssamlphp_configs/bendiks-simplesamlphp-sp/metadata:/application/simplesamlphp/metadata
     env_file:
       - .docker.env
     links:
