@@ -3,6 +3,9 @@ prefix = "/fastcgi"
 src = "fastcgi.conf.tmpl"
 dest = "/etc/nginx/fastcgi_simplesamlphp.conf"
 mode = "0644"
+keys = [
+  "/url_prefix",
+]
 
 #check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
 #reload_cmd = "/usr/sbin/nginx -s reload"

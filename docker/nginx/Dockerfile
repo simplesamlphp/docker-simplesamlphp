@@ -10,7 +10,7 @@ ADD https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}
 RUN chmod +x /usr/bin/confd
 ADD docker/nginx/confd/app-server.conf.tmpl /etc/confd/templates/
 ADD docker/nginx/confd/fastcgi.conf.tmpl /etc/confd/templates/
-ADD docker/nginx/confd/ssp1.toml /etc/confd/conf.d/
+ADD docker/nginx/confd/app-server.toml /etc/confd/conf.d/
 ADD docker/nginx/confd/fastcgi.toml /etc/confd/conf.d/
 
 ADD docker/config.yml /config/default.yml

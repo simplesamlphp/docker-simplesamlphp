@@ -14,13 +14,14 @@ function usage() {
 
 Manage your simplesamlphp docker environments.
 
-Example: simplesamlphp-docker.sh --add --config=docker/config.yml --config=docker/development.yml --name=\"simplesamlphp-dev-ssp1\"
+Example: ssamlphp-docker.sh --add --config=docker/config.yml --config=docker/development.yml --name=\"simplesamlphp-dev-ssp1\"
 
 Options (* indicates it is required):"
   local help_options="    \-a ,\--add\ \ \[Add new environment]
     \-d ,\--delete\ \ \[Delete environment specified by --name]
     \-r ,\--run\ \ \[Run environment specified by --name]
     \-b ,\--build\ \ \[Build environment specified by --name]
+    \-l ,\--list\ \ \[Lists all the existing docker environments]
    +\-c=,\--config=\<Parameter>\ \[Specify docker-compose configuration file(s) to use. Used by --add]
    *\-n=,\--name=\<Parameter>\ \[The name of the docker environment]
 "
@@ -51,23 +52,24 @@ function init_args() {
 
     case ${key} in
     -a | --add)
-      #add="true"
       op="add"
       shift
       ;;
     -d | --delete)
-      #delete="true"
       op="delete"
       shift
       ;;
     -r | --run)
-      #run="true"
       op="run"
       shift
       ;;
     -b | --build)
-      #build="true"
       op="build"
+      shift
+      ;;
+    -l | --list)
+      op="list"
+      REQ_ARGS=()
       shift
       ;;
     -c=* | --config=*)
@@ -170,7 +172,10 @@ build)
     -f docker-compose.yml \
     -f ${CONF_PATH}/docker-compose-overrides.yml \
     build \
-    --build-arg confd_file=docker/config-test1.yml
+    --build-arg confd_file="${config}"
+  ;;
+list)
+  print_configs
   ;;
 run)
   if [[ -z ${CONF_EXISTS} ]]; then
