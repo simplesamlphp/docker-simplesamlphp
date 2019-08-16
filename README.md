@@ -5,13 +5,7 @@ SimpleSAMLPHP Docker environment
 
 ### Configure
 
-Configure the docker environment using the file [docker/config.yml](docker/config.yml).
-
-For further configuration, see;
-- [docker/nginx/confd/app-server.conf.tmpl](docker/nginx/confd/app-server.conf.tmpl)
-- [docker/nginx/confd/fastcgi.conf.tmpl](docker/nginx/confd/fastcgi.conf.tmpl)
-- [docker/php-fpm/confd/php.ini.tmpl](docker/php-fpm/confd/php.ini.tmpl)
-- [docker/php-fpm/confd/php-fpm.conf.tmpl](docker/php-fpm/confd/php-fpm.conf.tmpl)
+Configure the docker environment using the file [docker/config.yml](docker/config.yml), and optionally add more files per environment as overrides, i.e: ` --config=docker/config.yml --config=docker/config-overrides.yml`
 
 #### TL;DR
 
@@ -33,3 +27,11 @@ Edit/delete these files as nescessary.
 ./ssamlphp-docker.sh --run --name="my-ssamlphp-sp"
 
 ```
+
+#### References
+For further configuration, see;
+
+- [docker/nginx/confd/app-server.conf.tmpl](docker/nginx/confd/app-server.conf.tmpl)
+- [docker/nginx/confd/fastcgi.conf.tmpl](docker/nginx/confd/fastcgi.conf.tmpl)
+- [docker/php-fpm/confd/php.ini.tmpl](docker/php-fpm/confd/php.ini.tmpl)
+- [docker/php-fpm/confd/php-fpm.conf.tmpl](docker/php-fpm/confd/php-fpm.conf.tmpl)
