@@ -601,7 +601,7 @@ $config = array(
      */
     'memcache_store.servers' => array(
         array(
-            array('hostname' => 'localhost'),
+            array('hostname' => 'memcached'),
         ),
     ),
 
@@ -613,7 +613,7 @@ $config = array(
      * than one instance is using memcache, you probably want to assign
      * a unique value per instance to this setting to avoid data collision.
      */
-    'memcache_store.prefix' => null,
+    'memcache_store.prefix' => 'sp2',
 
     /*
      * This value is the duration data should be stored in memcache. Data
@@ -983,7 +983,7 @@ $config = array(
      *
      * (This option replaces the old 'session.handler'-option.)
      */
-    'store.type'                    => 'phpsession',
+    'store.type'                    => 'memcache',
 
     /*
      * The DSN the sql datastore should connect to.

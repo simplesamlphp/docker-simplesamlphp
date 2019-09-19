@@ -35,6 +35,11 @@ services:
     working_dir: /code
     environment:
       - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+    links:
+      - memcached
+
+  memcached:
+    image: memcached
 
   gencert:
     image: cfssl/cfssl
