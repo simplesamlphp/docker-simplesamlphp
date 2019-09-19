@@ -22,12 +22,14 @@ services:
 
   sp1.tutorial.stack-dev.cirrusidentity.com:
     build: build
+    hostname: sp1
     volumes:
       - ./simplesamlphp:/code
       - ./sp1:/conf
     working_dir: /code
     environment:
       - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+    command: apache2 -D FOREGROUND
 
   sp2.tutorial.stack-dev.cirrusidentity.com:
     build: build
