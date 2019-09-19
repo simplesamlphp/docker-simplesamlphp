@@ -1,0 +1,59 @@
+version: '2'
+services:
+  idp.tutorial.stack-dev.cirrusidentity.com:
+    build: build
+    volumes:
+      - ./simplesamlphp:/code
+      - ./idp:/conf
+    working_dir: /code
+    environment:
+      - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+
+  proxy.tutorial.stack-dev.cirrusidentity.com:
+    build: build
+    volumes:
+      - ./simplesamlphp:/code
+      - ./proxy:/conf
+    working_dir: /code
+    environment:
+      - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+
+  sp1.tutorial.stack-dev.cirrusidentity.com:
+    build: build
+    volumes:
+      - ./simplesamlphp:/code
+      - ./sp1:/conf
+    working_dir: /code
+    environment:
+      - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+
+  sp2.tutorial.stack-dev.cirrusidentity.com:
+    build: build
+    volumes:
+      - ./simplesamlphp:/code
+      - ./sp2:/conf
+    working_dir: /code
+    environment:
+      - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+
+  gencert:
+    image: cfssl/cfssl
+    volumes:
+      - .:/work
+    working_dir: /work
+    entrypoint: /bin/bash
+    command:
+      - ./ca/generate.sh
+
+  nginx:
+    image: nginx:stable
+    links:
+      - idp.tutorial.stack-dev.cirrusidentity.com
+      - proxy.tutorial.stack-dev.cirrusidentity.com
+      - sp1.tutorial.stack-dev.cirrusidentity.com
+      - sp2.tutorial.stack-dev.cirrusidentity.com
+    volumes:
+      - ./nginx:/etc/nginx:ro
+    ports:
+      - '80:80'
+      - '443:443'

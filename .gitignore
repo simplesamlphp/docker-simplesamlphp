@@ -1,0 +1,7 @@
+simplesamlphp
+ca/*.pem
+nginx/*.pem
+ca/*.csr
+nginx/*.csr
+.idea
+.vscode

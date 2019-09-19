@@ -1,0 +1,6 @@
+{
+    "CN": "simpleSAMLphp testenv wildcard certificate",
+    "hosts": [
+        "*.tutorial.stack-dev.cirrusidentity.com"
+    ]
+}
