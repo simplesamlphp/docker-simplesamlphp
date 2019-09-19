@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   php7.3-dom \
   php7.3-mbstring \
   php-memcache \
+  php7.3-mysql \
   php7.3-sqlite3 \
   php7.3-xdebug \
   unzip \

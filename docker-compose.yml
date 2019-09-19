@@ -8,6 +8,8 @@ services:
     working_dir: /code
     environment:
       - SIMPLESAMLPHP_CONFIG_DIR=/conf/
+    links:
+      - mysql
 
   proxy.tutorial.stack-dev.cirrusidentity.com:
     build: build
@@ -40,6 +42,16 @@ services:
 
   memcached:
     image: memcached
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: sessions
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
 
   gencert:
     image: cfssl/cfssl
