@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   php-memcache \
   php7.3-mysql \
   php7.3-sqlite3 \
+  php7.3-ldap \
   php7.3-xdebug \
   unzip \
   && rm -rf /var/lib/apt/lists/*
