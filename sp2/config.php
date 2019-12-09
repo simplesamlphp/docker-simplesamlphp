@@ -725,6 +725,8 @@ $config = array(
      */
     'theme.use' => 'default',
 
+    'usenewui' => true,
+
     /*
      * Templating options
      *
