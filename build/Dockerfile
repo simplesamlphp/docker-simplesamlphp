@@ -1,21 +1,16 @@
-FROM debian:buster
+FROM amd64/php:7.3.13-apache
+ENV APACHE_DOCUMENT_ROOT /code/www
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  apache2 \
-  ca-certificates \
   curl \
   git \
-  libapache2-mod-php7.3 \
-  php7.3-cli \
-  php7.3-curl \
-  php7.3-dom \
-  php7.3-mbstring \
-  php-memcache \
-  php7.3-mysql \
-  php7.3-sqlite3 \
-  php7.3-ldap \
-  php7.3-xdebug \
+  libmemcached-dev \
+  libpng-dev \
   unzip \
+  zlib1g-dev \
   && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install -j5 gd mbstring mysqli pdo pdo_mysql \
+   && pecl install memcached redis xdebug \
+   && docker-php-ext-enable memcached redis xdebug
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN a2dismod mpm_event && a2enmod mpm_prefork
 COPY apache2.conf /etc/apache2/
