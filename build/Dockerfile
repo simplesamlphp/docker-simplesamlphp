@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libmemcached-dev \
   libpng-dev \
   unzip \
+  nodejs \
+  npm \
   zlib1g-dev \
   && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install -j5 gd mbstring mysqli pdo pdo_mysql \
