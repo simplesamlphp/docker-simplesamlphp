@@ -42,7 +42,7 @@ $config = array(
      * root directory.
      */
     'certdir' => 'cert/',
-    'loggingdir' => 'log/',
+    'loggingdir' => '/tmp/simplesaml',
     'datadir' => 'data/',
     'tempdir' => '/tmp/simplesaml',
 
